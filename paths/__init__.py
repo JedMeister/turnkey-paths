@@ -1,9 +1,8 @@
 #
 # Copyright (c) 2007-2010 Liraz Siri <liraz@turnkeylinux.org>
+#               2019 TurnKey GNU/Linux <admin@turnkeylinux.org>
 #
-# This file is part of turnkey-pylib.
-#
-# turnkey-pylib is open source software; you can redistribute it and/or
+# turnkey-paths is open source software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
 # published by the Free Software Foundation; either version 3 of
 # the License, or (at your option) any later version.
@@ -13,7 +12,8 @@ DESCRIPTION
 
 This modules contains:
 1) Paths: high-level class for representing file paths
-2) make_relative: convenience function for recalculating a path relative to another base path
+2) make_relative: convenience function for recalculating a path relative to
+   another base path
 
 File paths are accessible as instance attributes
 . and - are replaced for _
@@ -23,10 +23,10 @@ The files attribute is "inherited".
 USAGE
 
 class FooPaths(Paths):
-	files = ["foo", "sub.dir/sub-file"]
+        files = ["foo", "sub.dir/sub-file"]
 
 class BarPaths(FooPaths):
-	files = [ "bar" ] + subdir("sub.dir2", ["sub-file2"])
+        files = [ "bar" ] + subdir("sub.dir2", ["sub-file2"])
 
 class DefaultPath(Paths):
     @classmethod
@@ -50,6 +50,8 @@ import os
 from os.path import *
 
 __all__ = ['make_relative', 'Paths', 'subdir']
+
+
 def make_relative(base, path):
     """Return <path> relative to <base>.
 
@@ -72,10 +74,12 @@ def make_relative(base, path):
         base = dirname(base).rstrip('/')
         up_count += 1
 
+
 class Paths(str):
     make_relative = staticmethod(make_relative)
 
     files = []
+
     def __new__(cls, path, files=[]):
         return str.__new__(cls, path)
 
@@ -122,15 +126,17 @@ class Paths(str):
             attr = self._fname2attr(filename)
             self.files[attr] = filename
 
+
 def subdir(dir, files):
-    return [ os.path.join(dir, file) for file in files ]
+    return [os.path.join(dir, file) for file in files]
+
 
 def test():
     class FooPaths(Paths):
             files = ["foo", "sub.dir/sub-file"]
 
     class BarPaths(FooPaths):
-            files = [ "bar" ] + subdir("sub.dir2", ["sub-file2"])
+            files = ["bar"] + subdir("sub.dir2", ["sub-file2"])
 
     paths = BarPaths("/tmp")
     print(paths.foo)
@@ -140,6 +146,6 @@ def test():
 
     return paths
 
+
 if __name__ == "__main__":
     test()
-
